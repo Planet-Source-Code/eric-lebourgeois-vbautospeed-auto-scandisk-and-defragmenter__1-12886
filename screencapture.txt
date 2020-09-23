@@ -1,0 +1,17 @@
+Private Declare Sub keybd_event Lib "user32" (ByVal bVk As Byte, ByVal bScan As Byte, _ ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
+
+Public Function Capture_Desktop(ByVal Destination$) as Boolean 
+
+On Error goto errl 
+DoEvents 
+Call keybd_event(vbKeySnapshot, 1, 0, 0) 'Get the screen and copy it to clipboard 
+DoEvents 'let computer catch up 
+SavePicture Clipboard.GetData(vbCFBitmap), Destination$ ' saves the clipboard data to a BMP file 
+Capture_Desktop = True 
+Exit Function 
+errl: 
+Msgbox "Error number: " & err.number & ". " & err.description 
+Capture_Desktop = False 
+End Function 'A lil' example 
+Private Sub Command1_Click() 
+Capture_Desktop "c:\windows\desktop\desktop.bmp" 'That's it 
